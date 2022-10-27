@@ -14,11 +14,7 @@ final class Headers extends Parameters
         $headers = \array_change_key_case((array) $headers);
 
         foreach ($headers as $key => $value) {
-            try {
-                $this[$key] = $this->parseHeader($key, $value);
-            } catch (\Ddeboer\Imap\Exception\UnsupportedCharsetException $e) {
-                // safely skip header with unsupported charset
-            }
+            $this[$key] = $this->parseHeader($key, $value);
         }
     }
 
