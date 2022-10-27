@@ -18,7 +18,6 @@ abstract class AbstractTest extends TestCase
     public const SPECIAL_CHARS = 'A_\\|!"£$%&()=?àèìòùÀÈÌÒÙ<>-@#[]_ß_б_π_€_✔_你_يد_Z_';
 
     protected ?string $mailboxName;
-    protected ?string $altName;
 
     final protected function getConnection(): ConnectionInterface
     {
@@ -41,7 +40,6 @@ abstract class AbstractTest extends TestCase
     {
         $connection        = $connection ?? $this->getConnection();
         $this->mailboxName = \uniqid('mailbox_' . self::SPECIAL_CHARS);
-        $this->altName     = \uniqid('mailbox_' . self::SPECIAL_CHARS);
 
         return $connection->createMailbox($this->mailboxName);
     }
