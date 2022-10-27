@@ -7,9 +7,6 @@
         colors="true"
         verbose="true"
 >
-  <php>
-    <ini name="error_reporting" value="E_ALL"/>
-  </php>
   <coverage>
     <include>
       <directory suffix=".php">./src</directory>
