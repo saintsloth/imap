@@ -50,7 +50,6 @@ start-imap-server: wait-for-it
 .PHONY: stop-imap-server
 stop-imap-server:
 	docker stop ddeboer_imap_server
-	docker network rm ddeboer_imap_network
 
 .PHONY: test
 test: vendor
