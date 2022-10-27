@@ -119,9 +119,6 @@ final class MailboxTest extends AbstractTest
         static::assertSame(3, $this->mailbox->count());
     }
 
-    /**
-     * @requires PHP < 8.1
-     */
     public function testDelete(): void
     {
         $connection = $this->getConnection();

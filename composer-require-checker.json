@@ -2,7 +2,6 @@
   "symbol-whitelist" : [
     "null", "true", "false",
     "static", "self", "parent",
-    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
-    "IMAP\\Connection"
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object"
   ]
 }
