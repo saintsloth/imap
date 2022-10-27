@@ -69,8 +69,6 @@ final class Connection implements ConnectionInterface
      */
     public function close(int $flag = 0): bool
     {
-        $this->resource->clearLastMailboxUsedCache();
-
         return \imap_close($this->resource->getStream(), $flag);
     }
 
