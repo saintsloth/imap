@@ -267,7 +267,7 @@ final class Mailbox implements MailboxInterface
         });
 
         /** @var array|false $tree */
-        $tree = \imap_thread($this->resource->getStream(), \SE_UID);
+        $tree = \imap_thread($this->resource->getStream());
 
         \restore_error_handler();
 
