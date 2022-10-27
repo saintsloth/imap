@@ -61,7 +61,7 @@ interface ConnectionInterface extends \Countable
     public function createMailbox(string $name): MailboxInterface;
 
     /**
-     * Delete mailbox.
+     * Create mailbox.
      */
     public function deleteMailbox(MailboxInterface $mailbox): void;
 }
