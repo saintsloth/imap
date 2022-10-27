@@ -17,7 +17,7 @@ use Ddeboer\Imap\Mailbox;
  */
 final class ConnectionTest extends AbstractTest
 {
-    public function testValidResourceStream(): void
+    public function testValidResourceStream()
     {
         $connection = $this->getConnection();
 
@@ -26,7 +26,7 @@ final class ConnectionTest extends AbstractTest
         static::assertInstanceOf(\stdClass::class, $check);
     }
 
-    public function testCannotInstantiateArbitraryConnections(): void
+    public function testCannotInstantiateArbitraryConnections()
     {
         $resource = new ImapResource(\uniqid());
 
@@ -35,7 +35,7 @@ final class ConnectionTest extends AbstractTest
         $resource->getStream();
     }
 
-    public function testCloseConnection(): void
+    public function testCloseConnection()
     {
         $connection = $this->createConnection();
         $connection->close();
@@ -45,12 +45,12 @@ final class ConnectionTest extends AbstractTest
         $connection->close();
     }
 
-    public function testCount(): void
+    public function testCount()
     {
         static::assertIsInt($this->getConnection()->count());
     }
 
-    public function testPing(): void
+    public function testPing()
     {
         $connection = $this->createConnection();
 
@@ -63,7 +63,7 @@ final class ConnectionTest extends AbstractTest
         $connection->ping();
     }
 
-    public function testQuota(): void
+    public function testQuota()
     {
         if (false === \getenv('IMAP_QUOTAROOT_SUPPORTED')) {
             static::markTestSkipped('IMAP quota root support is disabled.');
@@ -79,7 +79,7 @@ final class ConnectionTest extends AbstractTest
         static::assertSame(1048576, $quota['limit']);
     }
 
-    public function testGetMailboxes(): void
+    public function testGetMailboxes()
     {
         $mailboxes = $this->getConnection()->getMailboxes();
         foreach ($mailboxes as $mailbox) {
@@ -87,13 +87,13 @@ final class ConnectionTest extends AbstractTest
         }
     }
 
-    public function testGetMailbox(): void
+    public function testGetMailbox()
     {
         $mailbox = $this->getConnection()->getMailbox('INBOX');
         static::assertInstanceOf(Mailbox::class, $mailbox);
     }
 
-    public function testCreateMailbox(): void
+    public function testCreateMailbox()
     {
         $connection = $this->getConnection();
 
@@ -109,7 +109,7 @@ final class ConnectionTest extends AbstractTest
         $connection->getMailbox($name);
     }
 
-    public function testCannotDeleteInvalidMailbox(): void
+    public function testCannotDeleteInvalidMailbox()
     {
         $connection = $this->getConnection();
         $mailbox    = $this->createMailbox();
@@ -122,7 +122,7 @@ final class ConnectionTest extends AbstractTest
         $connection->deleteMailbox($mailbox);
     }
 
-    public function testCannotCreateMailboxesOnReadonly(): void
+    public function testCannotCreateMailboxesOnReadonly()
     {
         $this->expectException(CreateMailboxException::class);
         $this->expectExceptionMessageRegExp('/(SERVERBUG|ALREADYEXISTS)/');
@@ -130,12 +130,12 @@ final class ConnectionTest extends AbstractTest
         $this->getConnection()->createMailbox('INBOX');
     }
 
-    public function testEscapesMailboxNames(): void
+    public function testEscapesMailboxNames()
     {
         static::assertInstanceOf(Mailbox::class, $this->getConnection()->createMailbox(\uniqid(self::SPECIAL_CHARS)));
     }
 
-    public function testCustomExceptionOnInvalidMailboxName(): void
+    public function testCustomExceptionOnInvalidMailboxName()
     {
         $this->expectException(CreateMailboxException::class);
         $this->expectExceptionMessageRegExp('/CANNOT/');
@@ -143,13 +143,13 @@ final class ConnectionTest extends AbstractTest
         static::assertInstanceOf(Mailbox::class, $this->getConnection()->createMailbox(\uniqid("\t")));
     }
 
-    public function testGetInvalidMailbox(): void
+    public function testGetInvalidMailbox()
     {
         $this->expectException(MailboxDoesNotExistException::class);
         $this->getConnection()->getMailbox('does-not-exist');
     }
 
-    public function testNumericMailbox(): void
+    public function testNumericMailbox()
     {
         $number  = (string) \mt_rand(100, 999);
         $conn    = $this->getConnection();

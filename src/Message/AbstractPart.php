@@ -428,7 +428,7 @@ abstract class AbstractPart implements PartInterface
     /**
      * Move to next part.
      *
-     * @return void
+     * @return int
      */
     final public function next()
     {
@@ -438,7 +438,7 @@ abstract class AbstractPart implements PartInterface
     /**
      * Reset part key.
      *
-     * @return void
+     * @return int
      */
     final public function rewind()
     {

@@ -40,7 +40,7 @@ final class MessageTest extends AbstractTest
     private $mailbox;
 
     /**
-     * @var string[]
+     * @var array
      */
     private static $encodings = [
         Mime\Mime::ENCODING_7BIT,
@@ -50,7 +50,7 @@ final class MessageTest extends AbstractTest
     ];
 
     /**
-     * @var array<string, string>
+     * @var array
      */
     private static $charsets = [
         'ASCII'        => '! "#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~',
@@ -71,12 +71,12 @@ final class MessageTest extends AbstractTest
         'Windows-1250' => 'ŚŤŹśťźˇ˘ŁĄŞŻ˛łąşĽ˝ľż',
     ];
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->mailbox = $this->createMailbox();
     }
 
-    public function testCustomNonExistentMessageFetch(): void
+    public function testCustomNonExistentMessageFetch()
     {
         $connection    = $this->getConnection();
         $messageNumber = 98765;
@@ -89,7 +89,7 @@ final class MessageTest extends AbstractTest
         $message->hasAttachments();
     }
 
-    public function testDeprecateMaskAsSeen(): void
+    public function testDeprecateMaskAsSeen()
     {
         $this->createTestMessage($this->mailbox, 'Message A');
         $message = $this->mailbox->getMessage(1);
@@ -99,7 +99,7 @@ final class MessageTest extends AbstractTest
         $message->maskAsSeen();
     }
 
-    public function testAlwaysKeepUnseen(): void
+    public function testAlwaysKeepUnseen()
     {
         $this->createTestMessage($this->mailbox, 'Message A');
 
@@ -113,7 +113,7 @@ final class MessageTest extends AbstractTest
         static::assertTrue($message->isSeen());
     }
 
-    public function testFlags(): void
+    public function testFlags()
     {
         $this->createTestMessage($this->mailbox, 'Message A');
 
@@ -128,7 +128,7 @@ final class MessageTest extends AbstractTest
         static::assertFalse($message->isSeen());
     }
 
-    public function testLowercaseCharsetAliases(): void
+    public function testLowercaseCharsetAliases()
     {
         $refClass   = new ReflectionClass(Transcoder::class);
         $properties = $refClass->getStaticProperties();
@@ -136,13 +136,13 @@ final class MessageTest extends AbstractTest
         $aliases = $properties['charsetAliases'];
 
         $keys        = \array_map('strval', \array_keys($aliases));
-        $loweredKeys = \array_map(static function ($charset): string {
+        $loweredKeys = \array_map(static function ($charset) {
             return \strtolower($charset);
         }, $keys);
 
         static::assertSame($loweredKeys, $keys, 'Charset aliases key must be lowercase');
 
-        $sameAliases = \array_filter($aliases, static function ($value, $key): bool {
+        $sameAliases = \array_filter($aliases, static function ($value, $key) {
             return \strtolower((string) $value) === \strtolower((string) $key);
         }, \ARRAY_FILTER_USE_BOTH);
 
@@ -161,7 +161,7 @@ final class MessageTest extends AbstractTest
     /**
      * @dataProvider provideCharsets
      */
-    public function testBodyCharsets(?string $charset, string $charList, ?string $encoding): void
+    public function testBodyCharsets(string $charset = null, string $charList, string $encoding = null)
     {
         $subject = \sprintf('[%s:%s]', $charset, $encoding);
         $this->createTestMessage(
@@ -193,7 +193,7 @@ final class MessageTest extends AbstractTest
         return $provider;
     }
 
-    public function testCharsetAlias(): void
+    public function testCharsetAlias()
     {
         $charset      = 'ks_c_5601-1987';
         $charsetAlias = 'EUC-KR';
@@ -213,7 +213,7 @@ final class MessageTest extends AbstractTest
         static::assertSame($text, \rtrim($message->getBodyText() ?: ''));
     }
 
-    public function testMicrosoftCharsetAlias(): void
+    public function testMicrosoftCharsetAlias()
     {
         $charset      = '134';
         $charsetAlias = 'GB2312';
@@ -233,7 +233,7 @@ final class MessageTest extends AbstractTest
         static::assertSame($text, \rtrim($message->getBodyText() ?: ''));
     }
 
-    public function testUnsupportedCharset(): void
+    public function testUnsupportedCharset()
     {
         $charset = \uniqid('NAN_CHARSET_');
         $this->createTestMessage(
@@ -252,7 +252,7 @@ final class MessageTest extends AbstractTest
         $message->getBodyText();
     }
 
-    public function testUndefinedContentCharset(): void
+    public function testUndefinedContentCharset()
     {
         $this->mailbox->addMessage($this->getFixture('null_content_charset'));
 
@@ -261,7 +261,7 @@ final class MessageTest extends AbstractTest
         static::assertSame('Hi!', \rtrim($message->getBodyText() ?: ''));
     }
 
-    public function testSpecialCharsetOnHeaders(): void
+    public function testSpecialCharsetOnHeaders()
     {
         $this->mailbox->addMessage($this->getFixture('ks_c_5601-1987_headers'));
 
@@ -277,7 +277,7 @@ final class MessageTest extends AbstractTest
     /**
      * @dataProvider provideIconvCharsets
      */
-    public function testIconvFallback(string $charset, string $charList, string $encoding): void
+    public function testIconvFallback(string $charset, string $charList, string $encoding)
     {
         $subject  = \sprintf('[%s:%s]', $charset, $encoding);
         $contents = \iconv('UTF-8', $charset, $charList);
@@ -310,7 +310,7 @@ final class MessageTest extends AbstractTest
         return $provider;
     }
 
-    public function testEmailAddress(): void
+    public function testEmailAddress()
     {
         $this->mailbox->addMessage($this->getFixture('email_address'));
         $message = $this->mailbox->getMessage(1);
@@ -345,7 +345,7 @@ final class MessageTest extends AbstractTest
         static::assertFalse($message->isSeen());
     }
 
-    public function testBcc(): void
+    public function testBcc()
     {
         $raw = "Subject: Undisclosed recipients\r\n";
         $this->mailbox->addMessage($raw);
@@ -356,7 +356,7 @@ final class MessageTest extends AbstractTest
         static::assertCount(0, $message->getTo());
     }
 
-    public function testDelete(): void
+    public function testDelete()
     {
         $this->createTestMessage($this->mailbox, 'Message A');
         $this->createTestMessage($this->mailbox, 'Message B');
@@ -372,7 +372,7 @@ final class MessageTest extends AbstractTest
         }
     }
 
-    public function testUndelete(): void
+    public function testUndelete()
     {
         $this->createTestMessage($this->mailbox, 'Message A');
         $this->createTestMessage($this->mailbox, 'Message B');
@@ -390,7 +390,7 @@ final class MessageTest extends AbstractTest
         static::assertSame('Message C', $this->mailbox->getMessage(3)->getSubject());
     }
 
-    public function testMove(): void
+    public function testMove()
     {
         $mailboxOne = $this->createMailbox();
         $mailboxTwo = $this->createMailbox();
@@ -407,7 +407,7 @@ final class MessageTest extends AbstractTest
         static::assertCount(1, $mailboxTwo);
     }
 
-    public function testResourceMemoryReuse(): void
+    public function testResourceMemoryReuse()
     {
         $mailboxOne = $this->createMailbox();
         $this->createTestMessage($mailboxOne, 'Message A');
@@ -426,7 +426,7 @@ final class MessageTest extends AbstractTest
         static::assertCount(1, $mailboxTwo);
     }
 
-    public function testCopy(): void
+    public function testCopy()
     {
         $mailboxOne = $this->createMailbox();
         $mailboxTwo = $this->createMailbox();
@@ -447,7 +447,7 @@ final class MessageTest extends AbstractTest
     /**
      * @dataProvider getAttachmentFixture
      */
-    public function testGetAttachments(string $fixture): void
+    public function testGetAttachments(string $fixture)
     {
         $this->mailbox->addMessage(
             $this->getFixture($fixture)
@@ -477,7 +477,7 @@ final class MessageTest extends AbstractTest
         ];
     }
 
-    public function testAttachmentLongFilename(): void
+    public function testAttachmentLongFilename()
     {
         $this->mailbox->addMessage($this->getFixture('attachment_long_filename'));
 
@@ -513,7 +513,7 @@ final class MessageTest extends AbstractTest
         static::assertSame($expected, $actual);
     }
 
-    public function testPlainTextAttachment(): void
+    public function testPlainTextAttachment()
     {
         $this->mailbox->addMessage($this->getFixture('plain_text_attachment'));
 
@@ -535,7 +535,7 @@ final class MessageTest extends AbstractTest
     /**
      * @dataProvider provideUndisclosedRecipientsCases
      */
-    public function testUndiscloredRecipients(string $fixture): void
+    public function testUndiscloredRecipients(string $fixture)
     {
         $this->mailbox->addMessage($this->getFixture($fixture));
 
@@ -552,7 +552,7 @@ final class MessageTest extends AbstractTest
         ];
     }
 
-    public function testAdditionalAddresses(): void
+    public function testAdditionalAddresses()
     {
         $this->mailbox->addMessage($this->getFixture('bcc'));
 
@@ -576,7 +576,7 @@ final class MessageTest extends AbstractTest
     /**
      * @dataProvider provideDateCases
      */
-    public function testDates(string $output, string $dateRawHeader): void
+    public function testDates(string $output, string $dateRawHeader)
     {
         $template = $this->getFixture('date-template');
         $message  = \str_replace('%date_raw_header%', $dateRawHeader, $template);
@@ -608,7 +608,7 @@ final class MessageTest extends AbstractTest
         ];
     }
 
-    public function testInvalidDate(): void
+    public function testInvalidDate()
     {
         $template = $this->getFixture('date-template');
         $message  = \str_replace('%date_raw_header%', 'Fri!', $template);
@@ -620,7 +620,7 @@ final class MessageTest extends AbstractTest
         $message->getDate();
     }
 
-    public function testRawHeaders(): void
+    public function testRawHeaders()
     {
         $headers = 'From: from@there.com' . "\r\n"
             . 'To: to@here.com' . "\n"
@@ -643,7 +643,7 @@ final class MessageTest extends AbstractTest
     /**
      * @see https://github.com/ddeboer/imap/issues/200
      */
-    public function testGetAllHeaders(): void
+    public function testGetAllHeaders()
     {
         $this->mailbox->addMessage($this->getFixture('bcc'));
 
@@ -662,7 +662,7 @@ final class MessageTest extends AbstractTest
         static::assertFalse($message->isSeen());
     }
 
-    public function testSetFlags(): void
+    public function testSetFlags()
     {
         $this->createTestMessage($this->mailbox, 'Message A');
 
@@ -686,12 +686,12 @@ final class MessageTest extends AbstractTest
     /**
      * @see https://github.com/ddeboer/imap/pull/143
      */
-    public function testUnstructuredMessage(): void
+    public function testUnstructuredMessage()
     {
         static::markTestIncomplete('Missing test case that gets imap_fetchstructure() to return false;');
     }
 
-    public function testPlainOnlyMessage(): void
+    public function testPlainOnlyMessage()
     {
         $this->mailbox->addMessage($this->getFixture('plain_only'));
 
@@ -701,7 +701,7 @@ final class MessageTest extends AbstractTest
         static::assertNull($message->getBodyHtml());
     }
 
-    public function testHtmlOnlyMessage(): void
+    public function testHtmlOnlyMessage()
     {
         $this->mailbox->addMessage($this->getFixture('html_only'));
 
@@ -711,7 +711,7 @@ final class MessageTest extends AbstractTest
         static::assertNull($message->getBodyText());
     }
 
-    public function testSimpleMultipart(): void
+    public function testSimpleMultipart()
     {
         $this->mailbox->addMessage($this->getFixture('simple_multipart'));
 
@@ -730,7 +730,7 @@ final class MessageTest extends AbstractTest
         static::assertFalse($message->isSeen());
     }
 
-    public function testGetRawMessage(): void
+    public function testGetRawMessage()
     {
         $fixture = $this->getFixture('structured_with_attachment');
         $this->mailbox->addMessage($fixture);
@@ -740,7 +740,7 @@ final class MessageTest extends AbstractTest
         static::assertSame($fixture, $message->getRawMessage());
     }
 
-    public function testAttachmentOnlyEmail(): void
+    public function testAttachmentOnlyEmail()
     {
         $fixture = $this->getFixture('mail_that_is_attachment');
         $this->mailbox->addMessage($fixture);
@@ -753,7 +753,7 @@ final class MessageTest extends AbstractTest
     /**
      * @see https://github.com/ddeboer/imap/issues/142
      */
-    public function testIssue142(): void
+    public function testIssue142()
     {
         $fixture = $this->getFixture('issue_142');
         $this->mailbox->addMessage($fixture);
@@ -763,7 +763,7 @@ final class MessageTest extends AbstractTest
         static::assertCount(1, $message->getAttachments());
     }
 
-    public function testSignedMessage(): void
+    public function testSignedMessage()
     {
         $fixture = $this->getFixture('pec');
         $this->mailbox->addMessage($fixture);
@@ -781,11 +781,11 @@ final class MessageTest extends AbstractTest
 
         foreach ($attachments as $attachment) {
             $expectedContains = $expected[$attachment->getFilename()];
-            static::assertStringContainsString($expectedContains, $attachment->getContent(), \sprintf('Attachment filename: %s', $attachment->getFilename()));
+            static::assertContains($expectedContains, $attachment->getContent(), \sprintf('Attachment filename: %s', $attachment->getFilename()));
         }
     }
 
-    public function testSimpleMessageWithoutCharset(): void
+    public function testSimpleMessageWithoutCharset()
     {
         $this->mailbox->addMessage($this->getFixture('without_charset_plain_only'));
 
@@ -794,7 +794,7 @@ final class MessageTest extends AbstractTest
         static::assertSame('Hi', \rtrim($message->getBodyText() ?: ''));
     }
 
-    public function testMultipartMessageWithoutCharset(): void
+    public function testMultipartMessageWithoutCharset()
     {
         $this->mailbox->addMessage($this->getFixture('without_charset_simple_multipart'));
 
@@ -804,7 +804,7 @@ final class MessageTest extends AbstractTest
         static::assertSame('MyHtml', $message->getBodyHtml());
     }
 
-    public function testGetInReplyTo(): void
+    public function testGetInReplyTo()
     {
         $fixture = $this->getFixture('references');
         $this->mailbox->addMessage($fixture);
@@ -822,7 +822,7 @@ final class MessageTest extends AbstractTest
         static::assertCount(0, $message->getInReplyTo());
     }
 
-    public function testGetReferences(): void
+    public function testGetReferences()
     {
         $fixture = $this->getFixture('references');
         $this->mailbox->addMessage($fixture);
@@ -840,7 +840,7 @@ final class MessageTest extends AbstractTest
         static::assertCount(0, $message->getReferences());
     }
 
-    public function testInlineAttachment(): void
+    public function testInlineAttachment()
     {
         $this->mailbox->addMessage($this->getFixture('inline_attachment'));
         $message = $this->mailbox->getMessage(1);
@@ -850,7 +850,7 @@ final class MessageTest extends AbstractTest
         static::assertNull($inline->getFilename());
     }
 
-    public function testMissingFromHeader(): void
+    public function testMissingFromHeader()
     {
         $this->mailbox->addMessage($this->getFixture('missing_from'));
         $message = $this->mailbox->getMessage(1);
@@ -858,7 +858,7 @@ final class MessageTest extends AbstractTest
         static::assertNull($message->getFrom());
     }
 
-    public function testMissingDateHeader(): void
+    public function testMissingDateHeader()
     {
         $this->mailbox->addMessage($this->getFixture('missing_date'));
         $message = $this->mailbox->getMessage(1);
@@ -866,7 +866,7 @@ final class MessageTest extends AbstractTest
         static::assertNull($message->getDate());
     }
 
-    public function testAttachmentMustNotBeCharsetDecoded(): void
+    public function testAttachmentMustNotBeCharsetDecoded()
     {
         $parts = [];
         foreach (self::$charsets as $charset => $charList) {
@@ -910,7 +910,7 @@ final class MessageTest extends AbstractTest
         }
     }
 
-    public function testNoMessageId(): void
+    public function testNoMessageId()
     {
         $this->mailbox->addMessage($this->getFixture('plain_only'));
 
@@ -919,7 +919,7 @@ final class MessageTest extends AbstractTest
         static::assertNull($message->getId());
     }
 
-    public function testUnknownEncodingIsManageable(): void
+    public function testUnknownEncodingIsManageable()
     {
         $this->mailbox->addMessage($this->getFixture('unknown_encoding'));
 
@@ -941,7 +941,7 @@ final class MessageTest extends AbstractTest
         $plain->getDecodedContent();
     }
 
-    public function testMultipleAttachments(): void
+    public function testMultipleAttachments()
     {
         $this->mailbox->addMessage($this->getFixture('multiple_nested_attachments'));
 
@@ -950,7 +950,7 @@ final class MessageTest extends AbstractTest
         static::assertCount(2, $message->getAttachments());
     }
 
-    public function testMixedInlineDisposition(): void
+    public function testMixedInlineDisposition()
     {
         $this->mailbox->addMessage($this->getFixture('mixed_filename'));
 
@@ -963,7 +963,7 @@ final class MessageTest extends AbstractTest
         static::assertSame('Price4VladDaKar.xlsx', $attachment->getFilename());
     }
 
-    public function testNestesEmbeddedWithAttachment(): void
+    public function testNestesEmbeddedWithAttachment()
     {
         $this->mailbox->addMessage($this->getFixture('nestes_embedded_with_attachment'));
 
@@ -977,11 +977,11 @@ final class MessageTest extends AbstractTest
         $attachments = $message->getAttachments();
         static::assertCount(3, $attachments);
         foreach ($attachments as $attachment) {
-            static::assertStringContainsString($expected[$attachment->getFilename()], $attachment->getContent());
+            static::assertContains($expected[$attachment->getFilename()], $attachment->getContent());
         }
     }
 
-    public function testImapMimeHeaderDecodeReturnsFalse(): void
+    public function testImapMimeHeaderDecodeReturnsFalse()
     {
         $this->mailbox->addMessage($this->getFixture('imap_mime_header_decode_returns_false'));
 
@@ -990,7 +990,7 @@ final class MessageTest extends AbstractTest
         static::assertSame('=?UTF-8?B?nnDusSNdG92w6Fuw61fMjAxOF8wMy0xMzMyNTMzMTkzLnBkZg==?=', $message->getSubject());
     }
 
-    private function resetAttachmentCharset(MessageInterface $message): void
+    private function resetAttachmentCharset(MessageInterface $message)
     {
         // Mimic GMAIL behaviour that correctly doesn't report charset
         // of attachments that don't have it
@@ -1034,19 +1034,20 @@ final class MessageTest extends AbstractTest
         $refParseStructure->setAccessible(false);
     }
 
-    public function testEmptyMessageIterator(): void
+    public function testEmptyMessageIterator()
     {
         $mailbox = $this->createMailbox();
 
         $messages = $mailbox->getMessages();
         static::assertCount(0, $messages);
+        static::assertFalse(\current($messages));
 
         $this->expectException(OutOfBoundsException::class);
 
         $messages->current();
     }
 
-    public function testGbkCharsetDecoding(): void
+    public function testGbkCharsetDecoding()
     {
         $this->mailbox->addMessage($this->getFixture('gbk_charset'));
 

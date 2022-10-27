@@ -85,11 +85,9 @@ final class Server implements ServerInterface
     {
         $errorMessage = null;
         $errorNumber  = 0;
-        \set_error_handler(static function ($nr, $message) use (&$errorMessage, &$errorNumber): bool {
+        \set_error_handler(static function ($nr, $message) use (&$errorMessage, &$errorNumber) {
             $errorMessage = $message;
             $errorNumber = $nr;
-
-            return true;
         });
 
         $resource = \imap_open(
