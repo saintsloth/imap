@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.10.0](https://github.com/ddeboer/imap/tree/1.10.0) (2020-01-24)
+## [v1.10.0](https://github.com/ddeboer/imap/tree/1.10.0) (2020-01-24)
 
 [Full Changelog](https://github.com/ddeboer/imap/compare/1.9.0...1.10.0)
 
