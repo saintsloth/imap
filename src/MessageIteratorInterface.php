@@ -9,7 +9,7 @@ use Ddeboer\Imap\Message\PartInterface;
 /**
  * @extends \Iterator<MessageInterface>
  */
-interface MessageIteratorInterface extends \Iterator, \Countable
+interface MessageIteratorInterface extends \Iterator
 {
     /**
      * Get current message.
