@@ -96,15 +96,11 @@ interface BasicMessageInterface extends PartInterface
 
     /**
      * Get message In-Reply-To (from headers).
-     *
-     * @return string[]
      */
     public function getInReplyTo(): array;
 
     /**
      * Get message References (from headers).
-     *
-     * @return string[]
      */
     public function getReferences(): array;
 

@@ -13,13 +13,17 @@ abstract class AbstractDate implements ConditionInterface
 {
     /**
      * Format for dates to be sent to the IMAP server.
+     *
+     * @var string
      */
-    private string $dateFormat;
+    private $dateFormat;
 
     /**
      * The date to be used for the condition.
+     *
+     * @var DateTimeInterface
      */
-    private DateTimeInterface $date;
+    private $date;
 
     /**
      * Constructor.

@@ -6,7 +6,10 @@ namespace Ddeboer\Imap\Exception;
 
 abstract class AbstractException extends \RuntimeException
 {
-    private const ERROR_LABELS = [
+    /**
+     * @var array
+     */
+    private static $errorLabels = [
         \E_ERROR                => 'E_ERROR',
         \E_WARNING              => 'E_WARNING',
         \E_PARSE                => 'E_PARSE',
@@ -24,11 +27,16 @@ abstract class AbstractException extends \RuntimeException
         \E_USER_DEPRECATED      => 'E_USER_DEPRECATED',
     ];
 
+    /**
+     * @param string     $message  The exception message
+     * @param int        $code     The exception code
+     * @param \Throwable $previous The previous exception
+     */
     final public function __construct(string $message, int $code = 0, \Throwable $previous = null)
     {
         $errorType = '';
-        if (isset(self::ERROR_LABELS[$code])) {
-            $errorType = \sprintf('[%s] ', self::ERROR_LABELS[$code]);
+        if (isset(self::$errorLabels[$code])) {
+            $errorType = \sprintf('[%s] ', self::$errorLabels[$code]);
         }
 
         $joinString      = "\n- ";

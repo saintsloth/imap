@@ -14,9 +14,9 @@ final class SearchExpression implements ConditionInterface
     /**
      * The conditions that together represent the expression.
      *
-     * @var ConditionInterface[]
+     * @var array
      */
-    private array $conditions = [];
+    private $conditions = [];
 
     /**
      * Adds a new condition to the expression.

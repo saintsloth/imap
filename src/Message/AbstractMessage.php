@@ -9,9 +9,9 @@ use Ddeboer\Imap\Exception\InvalidDateHeaderException;
 abstract class AbstractMessage extends AbstractPart
 {
     /**
-     * @var null|Attachment[]
+     * @var null|array
      */
-    private ?array $attachments = null;
+    private $attachments;
 
     /**
      * Get message headers.
@@ -25,10 +25,7 @@ abstract class AbstractMessage extends AbstractPart
      */
     final public function getId(): ?string
     {
-        $messageId = $this->getHeaders()->get('message_id');
-        \assert(null === $messageId || \is_string($messageId));
-
-        return $messageId;
+        return $this->getHeaders()->get('message_id');
     }
 
     /**
@@ -37,7 +34,6 @@ abstract class AbstractMessage extends AbstractPart
     final public function getFrom(): ?EmailAddress
     {
         $from = $this->getHeaders()->get('from');
-        \assert(null === $from || \is_array($from));
 
         return null !== $from ? $this->decodeEmailAddress($from[0]) : null;
     }
@@ -49,10 +45,7 @@ abstract class AbstractMessage extends AbstractPart
      */
     final public function getTo(): array
     {
-        $emails = $this->getHeaders()->get('to');
-        \assert(null === $emails || \is_array($emails));
-
-        return $this->decodeEmailAddresses($emails ?? []);
+        return $this->decodeEmailAddresses($this->getHeaders()->get('to') ?: []);
     }
 
     /**
@@ -62,10 +55,7 @@ abstract class AbstractMessage extends AbstractPart
      */
     final public function getCc(): array
     {
-        $emails = $this->getHeaders()->get('cc');
-        \assert(null === $emails || \is_array($emails));
-
-        return $this->decodeEmailAddresses($emails ?? []);
+        return $this->decodeEmailAddresses($this->getHeaders()->get('cc') ?: []);
     }
 
     /**
@@ -75,10 +65,7 @@ abstract class AbstractMessage extends AbstractPart
      */
     final public function getBcc(): array
     {
-        $emails = $this->getHeaders()->get('bcc');
-        \assert(null === $emails || \is_array($emails));
-
-        return $this->decodeEmailAddresses($emails ?? []);
+        return $this->decodeEmailAddresses($this->getHeaders()->get('bcc') ?: []);
     }
 
     /**
@@ -88,10 +75,7 @@ abstract class AbstractMessage extends AbstractPart
      */
     final public function getReplyTo(): array
     {
-        $emails = $this->getHeaders()->get('reply_to');
-        \assert(null === $emails || \is_array($emails));
-
-        return $this->decodeEmailAddresses($emails ?? []);
+        return $this->decodeEmailAddresses($this->getHeaders()->get('reply_to') ?: []);
     }
 
     /**
@@ -101,10 +85,7 @@ abstract class AbstractMessage extends AbstractPart
      */
     final public function getSender(): array
     {
-        $emails = $this->getHeaders()->get('sender');
-        \assert(null === $emails || \is_array($emails));
-
-        return $this->decodeEmailAddresses($emails ?? []);
+        return $this->decodeEmailAddresses($this->getHeaders()->get('sender') ?: []);
     }
 
     /**
@@ -114,10 +95,7 @@ abstract class AbstractMessage extends AbstractPart
      */
     final public function getReturnPath(): array
     {
-        $emails = $this->getHeaders()->get('return_path');
-        \assert(null === $emails || \is_array($emails));
-
-        return $this->decodeEmailAddresses($emails ?? []);
+        return $this->decodeEmailAddresses($this->getHeaders()->get('return_path') ?: []);
     }
 
     /**
@@ -159,10 +137,7 @@ abstract class AbstractMessage extends AbstractPart
      */
     final public function getSize()
     {
-        $size = $this->getHeaders()->get('size');
-        \assert(null === $size || \is_int($size) || \is_string($size));
-
-        return $size;
+        return $this->getHeaders()->get('size');
     }
 
     /**
@@ -170,34 +145,25 @@ abstract class AbstractMessage extends AbstractPart
      */
     final public function getSubject(): ?string
     {
-        $subject = $this->getHeaders()->get('subject');
-        \assert(null === $subject || \is_string($subject));
-
-        return $subject;
+        return $this->getHeaders()->get('subject');
     }
 
     /**
      * Get message In-Reply-To (from headers).
-     *
-     * @return string[]
      */
     final public function getInReplyTo(): array
     {
         $inReplyTo = $this->getHeaders()->get('in_reply_to');
-        \assert(null === $inReplyTo || \is_string($inReplyTo));
 
         return null !== $inReplyTo ? \explode(' ', $inReplyTo) : [];
     }
 
     /**
      * Get message References (from headers).
-     *
-     * @return string[]
      */
     final public function getReferences(): array
     {
         $references = $this->getHeaders()->get('references');
-        \assert(null === $references || \is_string($references));
 
         return null !== $references ? \explode(' ', $references) : [];
     }
@@ -256,11 +222,6 @@ abstract class AbstractMessage extends AbstractPart
         return $this->attachments;
     }
 
-    /**
-     * @param PartInterface<PartInterface> $part
-     *
-     * @return Attachment[]
-     */
     private static function gatherAttachments(PartInterface $part): array
     {
         $attachments = [];
@@ -286,8 +247,6 @@ abstract class AbstractMessage extends AbstractPart
 
     /**
      * @param \stdClass[] $addresses
-     *
-     * @return EmailAddress[]
      */
     private function decodeEmailAddresses(array $addresses): array
     {

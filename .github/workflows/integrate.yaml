@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - "master"
+  schedule:
+    - cron: '0 3 3 * *'
 
 jobs:
   composer-json-lint:
@@ -62,6 +64,7 @@ jobs:
     strategy:
       matrix:
         php-version:
+          - "7.3"
           - "7.4"
           - "8.0"
 
@@ -129,7 +132,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.4"
+          - "7.3"
 
     steps:
       - name: "Checkout"

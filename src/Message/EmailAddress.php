@@ -9,10 +9,25 @@ namespace Ddeboer\Imap\Message;
  */
 final class EmailAddress
 {
-    private string $mailbox;
-    private ?string $hostname;
-    private ?string $name;
-    private ?string $address;
+    /**
+     * @var string
+     */
+    private $mailbox;
+
+    /**
+     * @var null|string
+     */
+    private $hostname;
+
+    /**
+     * @var null|string
+     */
+    private $name;
+
+    /**
+     * @var null|string
+     */
+    private $address;
 
     public function __construct(string $mailbox, string $hostname = null, string $name = null)
     {

@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace Ddeboer\Imap\Message;
 
-/**
- * @extends \ArrayIterator<int|string, int|string|\stdClass[]>
- */
 class Parameters extends \ArrayIterator
 {
     /**
-     * @var array<string, string>
+     * @var array
      */
-    private static array $attachmentCustomKeys = [
+    private static $attachmentCustomKeys = [
         'name*'     => 'name',
         'filename*' => 'filename',
     ];
 
-    /**
-     * @param \stdClass[] $parameters
-     */
+    public function __construct(array $parameters = [])
+    {
+        parent::__construct();
+
+        $this->add($parameters);
+    }
+
     public function add(array $parameters = []): void
     {
         foreach ($parameters as $parameter) {
@@ -33,13 +34,16 @@ class Parameters extends \ArrayIterator
     }
 
     /**
-     * @return null|int|\stdClass[]|string
+     * @return mixed
      */
     public function get(string $key)
     {
         return $this[$key] ?? null;
     }
 
+    /**
+     * Decode value.
+     */
     final protected function decode(string $value): string
     {
         $parts = \imap_mime_header_decode($value);
