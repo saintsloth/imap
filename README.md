@@ -236,6 +236,7 @@ Move a message to another mailbox:
 ```php
 $mailbox = $connection->getMailbox('another-mailbox');
 $message->move($mailbox);
+$connection->expunge();
 ```
 
 Deleting messages:
