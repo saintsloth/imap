@@ -471,11 +471,9 @@ abstract class AbstractPart implements PartInterface
 
         $this->type = self::$typesMap[$this->structure->type] ?? self::TYPE_UNKNOWN;
 
-        // In our context, \ENCOTHER is as useful as an unknown encoding
+        // In our context, \ENCOTHER is as useful as an uknown encoding
         $this->encoding = self::$encodingsMap[$this->structure->encoding] ?? self::ENCODING_UNKNOWN;
-        if (isset($this->structure->subtype)) {
-            $this->subtype = $this->structure->subtype;
-        }
+        $this->subtype  = $this->structure->subtype;
 
         if (isset($this->structure->bytes)) {
             $this->bytes = $this->structure->bytes;
