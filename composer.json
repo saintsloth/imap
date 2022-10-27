@@ -1,5 +1,5 @@
 {
-    "name": "ddeboer/imap",
+    "name": "saintsloth/ddeboer-imap",
     "description": "Object-oriented IMAP for PHP",
     "keywords": [
         "email",
@@ -17,6 +17,10 @@
             "email": "zoeslam@gmail.com"
         },
         {
+            "name": "Kaprielov",
+            "email": "dakaprielov@gmail.com"
+        },
+        {
             "name": "Community contributors",
             "homepage": "https://github.com/ddeboer/imap/graphs/contributors"
         }
@@ -25,7 +29,8 @@
         "php": "^7.1",
         "ext-iconv": "*",
         "ext-imap": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "javanile/php-imap2": "^0.1.10"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",

@@ -61,7 +61,7 @@ final class Connection implements ConnectionInterface
      */
     public function expunge(): bool
     {
-        return \imap_expunge($this->resource->getStream());
+        return \imap2_expunge($this->resource->getStream());
     }
 
     /**
@@ -69,7 +69,7 @@ final class Connection implements ConnectionInterface
      */
     public function close(int $flag = 0): bool
     {
-        return \imap_close($this->resource->getStream(), $flag);
+        return \imap2_close($this->resource->getStream(), $flag);
     }
 
     /**
@@ -84,7 +84,7 @@ final class Connection implements ConnectionInterface
             $errorNumber = $nr;
         });
 
-        $return = \imap_get_quotaroot($this->resource->getStream(), $root);
+        $return = \imap2_get_quotaroot($this->resource->getStream(), $root);
 
         \restore_error_handler();
 
@@ -156,10 +156,10 @@ final class Connection implements ConnectionInterface
      */
     public function count()
     {
-        $return = \imap_num_msg($this->resource->getStream());
+        $return = \imap2_num_msg($this->resource->getStream());
 
         if (false === $return) {
-            throw new ImapNumMsgException('imap_num_msg failed');
+            throw new ImapNumMsgException('imap2_num_msg failed');
         }
 
         return $return;
@@ -172,7 +172,7 @@ final class Connection implements ConnectionInterface
      */
     public function ping(): bool
     {
-        return \imap_ping($this->resource->getStream());
+        return \imap2_ping($this->resource->getStream());
     }
 
     /**
@@ -182,7 +182,7 @@ final class Connection implements ConnectionInterface
      */
     public function createMailbox(string $name): MailboxInterface
     {
-        if (false === \imap_createmailbox($this->resource->getStream(), $this->server . \mb_convert_encoding($name, 'UTF7-IMAP', 'UTF-8'))) {
+        if (false === \imap2_createmailbox($this->resource->getStream(), $this->server . \mb_convert_encoding($name, 'UTF7-IMAP', 'UTF-8'))) {
             throw new CreateMailboxException(\sprintf('Can not create "%s" mailbox at "%s"', $name, $this->server));
         }
 
@@ -199,7 +199,7 @@ final class Connection implements ConnectionInterface
      */
     public function deleteMailbox(MailboxInterface $mailbox): void
     {
-        if (false === \imap_deletemailbox($this->resource->getStream(), $mailbox->getFullEncodedName())) {
+        if (false === \imap2_deletemailbox($this->resource->getStream(), $mailbox->getFullEncodedName())) {
             throw new DeleteMailboxException(\sprintf('Mailbox "%s" could not be deleted', $mailbox->getName()));
         }
 
@@ -217,9 +217,9 @@ final class Connection implements ConnectionInterface
         }
 
         $this->mailboxNames = [];
-        $mailboxesInfo      = \imap_getmailboxes($this->resource->getStream(), $this->server, '*');
+        $mailboxesInfo      = \imap2_getmailboxes($this->resource->getStream(), $this->server, '*');
         if (!\is_array($mailboxesInfo)) {
-            throw new ImapGetmailboxesException('imap_getmailboxes failed');
+            throw new ImapGetmailboxesException('imap2_getmailboxes failed');
         }
 
         foreach ($mailboxesInfo as $mailboxInfo) {
