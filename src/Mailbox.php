@@ -154,10 +154,6 @@ final class Mailbox implements MailboxInterface
         }
         $query = $search->toString();
 
-        if (\PHP_VERSION_ID < 80000) {
-            $descending = (int) $descending;
-        }
-
         // We need to clear the stack to know whether imap_last_error()
         // is related to this imap_search
         \imap_errors();
@@ -166,7 +162,7 @@ final class Mailbox implements MailboxInterface
             $params = [
                 $this->resource->getStream(),
                 $sortCriteria,
-                $descending,
+                $descending ? 1 : 0,
                 \SE_UID,
                 $query,
             ];

@@ -35,11 +35,6 @@
         "phpstan/phpstan-strict-rules": "^0.12.5",
         "phpunit/phpunit": "^9.4.3"
     },
-    "config": {
-        "platform": {
-            "php": "7.3"
-        }
-    },
     "autoload": {
         "psr-4": {
             "Ddeboer\\Imap\\": "src/"
@@ -48,6 +43,11 @@
     "autoload-dev": {
         "psr-4": {
             "Ddeboer\\Imap\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "7.3"
         }
     }
 }

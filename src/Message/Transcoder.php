@@ -310,13 +310,7 @@ final class Transcoder
             return true;
         });
 
-        $decodedText = '';
-
-        try {
-            $decodedText = \mb_convert_encoding($text, 'UTF-8', $fromCharset);
-        } catch (\Error $error) {
-            $errorMessage = $error->getMessage();
-        }
+        $decodedText = \mb_convert_encoding($text, 'UTF-8', $fromCharset);
 
         \restore_error_handler();
 
