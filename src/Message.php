@@ -109,7 +109,7 @@ final class Message extends Message\AbstractMessage implements MessageInterface
 
         $msgno = \imap2_msgno($this->resource->getStream(), $messageNumber);
         if (\is_numeric($msgno) && $msgno > 0) {
-            $this->imapMsgNo = $msgno;
+            $this->imapMsgNo = (int) $msgno;
 
             return;
         }

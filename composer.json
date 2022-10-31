@@ -4,7 +4,8 @@
     "keywords": [
         "email",
         "mail",
-        "imap"
+        "imap",
+        "oauth"
     ],
     "license": "MIT",
     "authors": [
